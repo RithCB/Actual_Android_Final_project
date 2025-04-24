@@ -3,9 +3,11 @@ package com.example.ite303_finalproject;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.SearchView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -19,12 +21,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     AlertDialog.Builder dialog;
     ArrayList<Note>obj;
     NoteAdapter adapter;
+    ArrayAdapter<String> arrayAdapter;
+
+    List<String> title_list;
+
+
 
 
     @Override
@@ -39,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         });
         fab();
         bindData();
+        search();
     }
 
 
@@ -76,9 +85,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 Note newNote = new Note(nt, nd, priority);
                 obj.add(newNote);
+                adapter.updateList(new ArrayList<>(obj));
                 adapter.notifyItemInserted(obj.size() - 1); // notify adapter of new item
                 dialog.create().dismiss();
                 adapter.notifyDataSetChanged();
+
 
             }
         });
@@ -87,8 +98,11 @@ public class MainActivity extends AppCompatActivity {
     public void bindData(){
         obj = new ArrayList<>();
         obj.add(new Note("Do final project","Do it for 10 mn","High"));
+        title_list = new ArrayList<>();
+        title_list.add("Do final project");
 
         RecyclerView recyclerView = findViewById(R.id.recyclerViewNotes);
+        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, title_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new NoteAdapter(obj);
         recyclerView.setAdapter(adapter);
@@ -105,5 +119,44 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+    // create a title list
+    // add the title from the obj to the title list
+    // Create an arrayAdapter
+    // Create a search function that search through the tittle list
+
+
+
+
+    // Your search function does not work yet 
+
+    public void search() {
+        SearchView searchView = findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                ArrayList<Note> filteredList = new ArrayList<>();
+
+                for (Note note : obj) {
+                    if (note.getNote_title().toLowerCase().startsWith(newText.toLowerCase()))
+                    {
+                        filteredList.add(note);
+                    }
+                }
+
+                adapter.updateList(filteredList);
+                return true;
+            }
+        });
+    }
+
+
 
 }

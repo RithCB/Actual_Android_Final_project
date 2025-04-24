@@ -52,4 +52,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 
         }
     }
+
+    public void updateList(ArrayList<Note> newList) {
+        noteList = newList;
+        notifyDataSetChanged();
+    }
+
 }

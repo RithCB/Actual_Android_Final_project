@@ -15,14 +15,14 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- SearchView for filtering notes -->
+
         <SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:queryHint="Search notes..." />
 
-        <!-- RecyclerView to display list of notes -->
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewNotes"
             android:layout_width="match_parent"
@@ -31,7 +31,7 @@
             android:paddingTop="8dp"
             android:clipToPadding="false" />
 
-        <!-- FloatingActionButton to add a new note -->
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabAddNote"
             android:layout_width="wrap_content"
