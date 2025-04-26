@@ -1,9 +1,23 @@
 package com.example.ite303_finalproject;
 
 public class Note {
+
     private String note_title;
     private String note_description;
     private String priority;
+    public void setNote_title(String note_title) {
+        this.note_title = note_title;
+    }
+
+    public void setNote_description(String note_description) {
+        this.note_description = note_description;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+
 
     public Note(String note_title, String note_description, String priority) {
         this.note_title = note_title;

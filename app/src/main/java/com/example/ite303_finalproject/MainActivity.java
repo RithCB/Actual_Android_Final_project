@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         fab();
         bindData();
         search();
+
     }
 
 
@@ -95,19 +96,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void bindData(){
+    public void bindData() {
         obj = new ArrayList<>();
-        obj.add(new Note("Do final project","Do it for 10 mn","High"));
+        obj.add(new Note("Do final project", "Do it for 10 mn", "High"));
         title_list = new ArrayList<>();
         title_list.add("Do final project");
 
         RecyclerView recyclerView = findViewById(R.id.recyclerViewNotes);
-        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, title_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new NoteAdapter(obj);
+
+        // Pass the click listener to the adapter
+        adapter = new NoteAdapter(obj, position -> showBottomSheetDialog(position));
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
+
 
 
     public void fab(){
@@ -156,6 +159,90 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    public void showUpdateDialog(int position, Note currentNote) {
+        AlertDialog.Builder updateDialog = new AlertDialog.Builder(this);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.note_gui, null);
+        updateDialog.setView(view);
+        AlertDialog alertDialog = updateDialog.create();
+        alertDialog.show();
+
+        EditText title = view.findViewById(R.id.editTextTitle);
+        EditText description = view.findViewById(R.id.editTextDescription);
+        RadioButton radioHigh = view.findViewById(R.id.radioHigh);
+        RadioButton radioMedium = view.findViewById(R.id.radioMedium);
+        RadioButton radioLow = view.findViewById(R.id.radioLow);
+        Button saveBtn = view.findViewById(R.id.buttonSave);
+
+        // Pre-fill existing data
+        title.setText(currentNote.getNote_title());
+        description.setText(currentNote.getNote_description());
+
+        switch (currentNote.getPriority()) {
+            case "High":
+                radioHigh.setChecked(true);
+                break;
+            case "Medium":
+                radioMedium.setChecked(true);
+                break;
+            case "Low":
+                radioLow.setChecked(true);
+                break;
+        }
+
+        saveBtn.setText("Update"); // Optional: Change button text
+
+        saveBtn.setOnClickListener(v -> {
+            String updatedTitle = title.getText().toString();
+            String updatedDesc = description.getText().toString();
+            String updatedPriority = "";
+
+            if (radioHigh.isChecked()) updatedPriority = "High";
+            else if (radioMedium.isChecked()) updatedPriority = "Medium";
+            else if (radioLow.isChecked()) updatedPriority = "Low";
+
+            // Update the note object
+            currentNote.setNote_title(updatedTitle);
+            currentNote.setNote_description(updatedDesc);
+            currentNote.setPriority(updatedPriority);
+
+            obj.set(position, currentNote);
+            adapter.updateList(new ArrayList<>(obj)); // or adapter.notifyItemChanged(position)
+            alertDialog.dismiss();
+        });
+    }
+
+
+
+
+    private void showBottomSheetDialog(int position) {
+        if (position < 0 || position >= obj.size()) return; // Guard clause
+
+        View view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet, null);
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+        dialog.show();
+
+        Button btnUpdate = view.findViewById(R.id.btnUpdate);
+        Button btnDelete = view.findViewById(R.id.btnDelete);
+        Button btnCancel = view.findViewById(R.id.btnCancel);
+
+        btnUpdate.setOnClickListener(v -> {
+            showUpdateDialog(position, obj.get(position)); // Pass current note
+            dialog.dismiss();
+        });
+
+        btnDelete.setOnClickListener(v -> {
+            obj.remove(position);                          // Remove item
+            adapter.updateList(new ArrayList<>(obj));      // Refresh list
+            dialog.dismiss();
+        });
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss()); // Just close the dialog
+    }
+
+
 
 
 
