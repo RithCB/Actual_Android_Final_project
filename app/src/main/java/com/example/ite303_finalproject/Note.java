@@ -2,6 +2,8 @@ package com.example.ite303_finalproject;
 
 public class Note {
 
+
+
     private String note_title;
     private String note_description;
     private String priority;
@@ -36,4 +38,6 @@ public class Note {
     public String getPriority() {
         return priority;
     }
+
+
 }
