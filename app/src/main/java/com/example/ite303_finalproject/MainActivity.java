@@ -1,6 +1,7 @@
 package com.example.ite303_finalproject;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,12 +31,11 @@ public class MainActivity extends AppCompatActivity {
     AlertDialog.Builder dialog;
     ArrayList<Note> obj;
     NoteAdapter adapter;
-    ArrayAdapter<String> arrayAdapter;
 
     List<String> title_list;
     private DB_Note db;
     int item_Index = -1;
-    String columnid = "";
+    private String columnid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,54 +48,73 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        db = new DB_Note(this); // initialize database
 
+        create_Database();
         fab();
         bindData();
         search();
+        getAllNotes();
 
+    }
+    public void create_Database(){
+        db= new DB_Note(MainActivity.this);
     }
 
     private void addNote(String title, String description, String priority) {
-        Note newNote = new Note(title, description, priority);
+        SQLiteDatabase dbWrite = db.getWritableDatabase();
+
+        ContentValues contents = new ContentValues();
+        contents.put(DB_Note.Col_title, title);
+        contents.put(DB_Note.Col_description, description);
+        contents.put(DB_Note.Col_priority, priority);
+
+        long id = dbWrite.insert("tblnote", null, contents);
+        dbWrite.close();
+
+        Note newNote = new Note((int) id, title, description, priority);
         obj.add(newNote);
         adapter.updateList(new ArrayList<>(obj));
         adapter.notifyItemInserted(obj.size() - 1);
-
-        SQLiteDatabase obj = db.getWritableDatabase();
-        ContentValues contents = new ContentValues();
-        contents.put("Note_title", title);
-        contents.put("Note_description", description);
-        contents.put("Note_priority", priority);
-        obj.insert("tblnote", null, contents);
-        obj.close();
     }
 //    implement update function and delete function
-    private void updateNote(int position, String updatedTitle, String updatedDesc, String updatedPriority) {
-        Note currentNote = obj.get(position);
-        currentNote.setNote_title(updatedTitle);
-        currentNote.setNote_description(updatedDesc);
-        currentNote.setPriority(updatedPriority);
+public void updateNote(int id, String newTitle, String newDesc, String newPriority) {
+    if (item_Index != -1) {
+        Note updatedNote = new Note(id,newTitle, newDesc, newPriority);
+        updatedNote.setId(Integer.parseInt(columnid));
 
-        obj.set(position, currentNote);
+        obj.set(item_Index, updatedNote);
         adapter.updateList(new ArrayList<>(obj));
+        adapter.notifyDataSetChanged();
 
         SQLiteDatabase dbUpdate = db.getWritableDatabase();
         ContentValues contents = new ContentValues();
-        contents.put("Note_title", updatedTitle);
-        contents.put("Note_description", updatedDesc);
-        contents.put("Note_priority", updatedPriority);
+        contents.put(DB_Note.Col_title, newTitle);
+        contents.put(DB_Note.Col_description, newDesc);
+        contents.put(DB_Note.Col_priority, newPriority);
 
+        dbUpdate.update("tblnote", contents, "id=?", new String[]{columnid});
+        dbUpdate.close();
 
-
+        item_Index = -1;
+        columnid = "";
     }
+}
 
     private void deleteNote(int position) {
+        Note note = obj.get(position); // Get the note to delete
+
+        // Remove from the database using the note's id
+        SQLiteDatabase dbDelete = db.getWritableDatabase();
+        String whereClause = "id = ?";
+        String[] whereArgs = { String.valueOf(note.getId()) };
+        dbDelete.delete(DB_Note.Tbl_name, whereClause, whereArgs);
+        dbDelete.close();
+
+        // Remove from the list and update the adapter
         obj.remove(position);
         adapter.updateList(new ArrayList<>(obj));
-
-
     }
+
 
     public void displayDialog(){
         dialog = new AlertDialog.Builder(this);
@@ -128,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void showUpdateDialog(int position, Note currentNote) {
         AlertDialog.Builder updateDialog = new AlertDialog.Builder(this);
+        item_Index = position;
+        columnid = String.valueOf(obj.get(position).getId());
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.note_gui, null);
         updateDialog.setView(view);
@@ -153,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
         saveBtn.setText("Update");
 
         saveBtn.setOnClickListener(v -> {
+            int id = currentNote.getId(); //
             String updatedTitle = title.getText().toString();
             String updatedDesc = description.getText().toString();
             String updatedPriority = "";
@@ -161,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
             else if (radioMedium.isChecked()) updatedPriority = "Medium";
             else if (radioLow.isChecked()) updatedPriority = "Low";
 
-            updateNote(position, updatedTitle, updatedDesc, updatedPriority);
+            updateNote(id,updatedTitle, updatedDesc, updatedPriority);
             alertDialog.dismiss();
         });
     }
@@ -193,8 +215,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void bindData() {
-        obj = new ArrayList<>();
-        obj.add(new Note("Do final project", "Do it for 10 mn", "High"));
+        obj = getAllNotes();
         title_list = new ArrayList<>();
         title_list.add("Do final project");
 
@@ -233,5 +254,26 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private ArrayList<Note> getAllNotes() {
+        ArrayList<Note> notes = new ArrayList<>();
+        SQLiteDatabase dbRead = db.getReadableDatabase();
+        Cursor cursor = dbRead.rawQuery("SELECT * FROM " + DB_Note.Tbl_name, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(DB_Note.Col_id));
+                String title = cursor.getString(cursor.getColumnIndexOrThrow(DB_Note.Col_title));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow(DB_Note.Col_description));
+                String priority = cursor.getString(cursor.getColumnIndexOrThrow(DB_Note.Col_priority));
+
+                notes.add(new Note(id, title, description, priority));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        dbRead.close();
+        return notes;
     }
 }

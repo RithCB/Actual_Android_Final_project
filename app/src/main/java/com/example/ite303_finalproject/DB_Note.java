@@ -16,11 +16,11 @@ public class DB_Note extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTableQuery = "CREATE TABLE " + Tbl_name + " ("
-                + Col_id + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + Col_title + " TEXT, "
-                + Col_description + " TEXT, "
-                + Col_priority + " TEXT)";
+        String createTableQuery = "CREATE TABLE " + Tbl_name + " (" +
+                Col_id + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                Col_title + " TEXT NOT NULL, " +
+                Col_description + " TEXT NOT NULL, " +
+                Col_priority + " TEXT NOT NULL)";
         db.execSQL(createTableQuery);
     }
 
