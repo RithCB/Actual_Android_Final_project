@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ToolbarTitleStyle" parent="@style/TextAppearance.MaterialComponents.Headline6">
+        <!-- Default modern font (sans-serif-medium is built into Android) -->
+        <item name="android:fontFamily">sans-serif-medium</item>
+
+        <!-- Optimal text size (scaled for visibility but not oversized) -->
+        <item name="android:textSize">25sp</item> <!-- Slightly smaller than 30sp for elegance -->
+
+        <!-- Soft white with 90% opacity (less harsh) -->
+        <item name="android:textColor">#E6FFFFFF</item> <!-- #E6 = 90% alpha -->
+
+        <!-- Slightly negative letter spacing for tighter, modern look -->
+        <item name="android:letterSpacing">-0.01</item>
+
+        <!-- No bold (let sans-serif-medium handle weight naturally) -->
+        <item name="android:textStyle">normal</item>
+
+        <!-- Subtle shadow for depth (optional but recommended) -->
+        <item name="android:shadowColor">#40000000</item> <!-- 25% opacity black -->
+        <item name="android:shadowDx">0</item> <!-- No horizontal offset -->
+        <item name="android:shadowDy">1</item> <!-- Tiny vertical drop -->
+        <item name="android:shadowRadius">2</item> <!-- Soft blur -->
+    </style>
+</resources>

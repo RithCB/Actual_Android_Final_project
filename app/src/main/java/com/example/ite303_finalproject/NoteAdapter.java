@@ -1,5 +1,6 @@
 package com.example.ite303_finalproject;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,20 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         holder.title.setText(note.getNote_title());
         holder.description.setText(note.getNote_description());
         holder.priority.setText(note.getPriority());
+        switch (note.getPriority()) {
+            case "High":
+                holder.priority.setTextColor(Color.parseColor("#FF1744")); // Bright Red
+                break;
+            case "Medium":
+                holder.priority.setTextColor(Color.parseColor("#FFA500")); // Bright Orange
+                break;
+            case "Low":
+                holder.priority.setTextColor(Color.parseColor("#00C853")); // Bright Green
+                break;
+            default:
+                holder.priority.setTextColor(Color.BLACK);
+                break;
+        }
     }
 
     @Override

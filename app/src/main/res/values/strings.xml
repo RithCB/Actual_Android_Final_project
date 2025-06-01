@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ITE303_FinalProject</string>
+    <string name="toolbar">Note app for final project</string>
 </resources>
