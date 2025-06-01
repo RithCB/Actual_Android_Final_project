@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="#F2F1F1">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,22 +15,49 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp">
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
+
+            <!-- Toolbar -->
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#FF6B6B"
+                app:title="Note app final project"
+                app:titleTextColor="@android:color/white"
+                app:titleTextAppearance="@style/ToolbarTitleStyle"/>
 
 
+        </com.google.android.material.appbar.AppBarLayout>
+        <!-- SearchView inside AppBar -->
         <SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:queryHint="Search notes..." />
+            android:queryHint="Search notes..."
+            android:background="#F1F1F1"
+            />
 
 
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/recycler_strok">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewNotes"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:paddingTop="8dp"
-            android:clipToPadding="false" />
+            android:clipToPadding="false"
+            android:layout_marginTop="2dp"/>
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -39,9 +67,12 @@
             android:layout_gravity="end"
             android:layout_margin="16dp"
             android:contentDescription="Add Note"
+            app:tint="@android:color/white"
             android:src="@android:drawable/ic_input_add"
-            android:backgroundTint="#983998" />
+            android:backgroundTint="#FF6B6B"
+            app:fabCustomSize="72dp"/>
 
+    </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

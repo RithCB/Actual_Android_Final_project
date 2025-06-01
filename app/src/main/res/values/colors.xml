@@ -2,4 +2,19 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="blue">#2196F3</color>
+    <color name="red">#F44336</color>
+    <color name="orange">#FF9800</color>
+    <color name="green">#4CAF50</color>
+    <color name="gray">#DDDDDD</color>
+    <color name="priority_high">#F44336</color>     <!-- Red -->
+    <color name="priority_medium">#FFC107</color>   <!-- Amber -->
+    <color name="priority_low">#4CAF50</color>      <!-- Green -->
+    <color name="card_background">#F3EFFF</color>
+    <color name="lavender">#F3EFFF</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryVariant">#303F9F</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+
+
 </resources>

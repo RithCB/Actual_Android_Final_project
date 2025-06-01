@@ -131,6 +131,7 @@ public void updateNote(int id, String newTitle, String newDesc, String newPriori
         RadioButton radioMedium = view.findViewById(R.id.radioMedium);
         RadioButton radioLow = view.findViewById(R.id.radioLow);
 
+
         submit.setOnClickListener(v -> {
             String nt = title.getText().toString();
             String nd = dsc.getText().toString();
@@ -139,6 +140,8 @@ public void updateNote(int id, String newTitle, String newDesc, String newPriori
             if (radioHigh.isChecked()) priority = "High";
             else if (radioMedium.isChecked()) priority = "Medium";
             else if (radioLow.isChecked()) priority = "Low";
+
+
 
             addNote(nt, nd, priority);
             alert.dismiss();
