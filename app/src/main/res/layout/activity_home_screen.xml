@@ -31,7 +31,6 @@
                 app:titleTextColor="@android:color/white"
                 app:titleTextAppearance="@style/ToolbarTitleStyle"/>
 
-
         </com.google.android.material.appbar.AppBarLayout>
         <!-- SearchView inside AppBar -->
         <SearchView
@@ -41,9 +40,6 @@
             android:queryHint="Search notes..."
             android:background="#F1F1F1"
             />
-
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,7 +55,6 @@
             android:clipToPadding="false"
             android:layout_marginTop="2dp"/>
 
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabAddNote"
             android:layout_width="wrap_content"
@@ -71,7 +66,6 @@
             android:src="@android:drawable/ic_input_add"
             android:backgroundTint="#FF6B6B"
             app:fabCustomSize="72dp"/>
-
     </LinearLayout>
     </LinearLayout>
 
