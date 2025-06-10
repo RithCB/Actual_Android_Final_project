@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.updateList(new ArrayList<>(obj));
         adapter.notifyItemInserted(obj.size() - 1);
     }
-//    implement update function and delete function
+
 public void updateNote(int id, String newTitle, String newDesc, String newPriority) {
     if (item_Index != -1) {
         Note updatedNote = new Note(id,newTitle, newDesc, newPriority);
